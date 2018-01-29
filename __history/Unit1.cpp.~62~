@@ -1,0 +1,204 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit1.h"
+#include "Unit2.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm1 *Form1;
+//---------------------------------------------------------------------------
+
+ void __fastcall TForm1::draw()
+ {
+	 FieldEND->Canvas->Draw(ScrollBar2->Position,0,FieldTOP->Picture->Graphic);
+	   for (int i=0; i<IDifference ;i++)
+	   {
+			if(i%125==0)
+			{
+				FieldEND->Canvas->Draw(0,PngPictureTOP->Height+i,FieldSPECIAL->Picture->Graphic );
+				i+=FieldSPECIAL->Height;
+				--i;
+			}
+			else
+				FieldEND->Canvas->Draw(0,PngPictureTOP->Height+i,FieldMID->Picture->Graphic);
+	   }
+	   FieldEND->Canvas->Draw(0,PngPictureTOP->Height+IDifference,FieldBOT->Picture->Graphic);
+ }
+
+ void __fastcall TForm1::load(int iNr)
+ {
+	SSource=Edit3->Text;
+	UnicodeString sNr=IntToStr(iNr);
+
+	PngPictureTOP->LoadFromFile("podnosnik_scr/"+SSource+sNr+"/TOP.png");
+	PngPictureBOT->LoadFromFile("podnosnik_scr/"+SSource+sNr+"/BOT.png");
+	PngPictureMID->LoadFromFile("podnosnik_scr/"+SSource+sNr+"/MID.png");
+	PngPictureSPECIAL->LoadFromFile("podnosnik_scr/"+SSource+sNr+"/SPECIAL.png");
+
+	FieldTOP->Picture->Assign(PngPictureTOP);
+	FieldBOT->Picture->Assign(PngPictureBOT);
+	FieldMID->Picture->Assign(PngPictureMID);
+	FieldSPECIAL->Picture->Assign(PngPictureSPECIAL);
+ }
+
+
+_fastcall TForm1::TForm1(TComponent* Owner)
+	: TForm(Owner)
+{
+	PngPictureTOP=new TPngImage;
+	PngPictureBOT=new TPngImage;
+	PngPictureMID=new TPngImage;
+	PngPictureSPECIAL=new TPngImage;
+
+	load(1);
+
+	Form1->Color=clLtGray;
+
+	IHeight=StrToInt(Edit1->Text);
+	ScrollBar1->SetParams(500,PngPictureTOP->Height+PngPictureBOT->Height,1050);
+	ScrollBar2->SetParams(2,-50,50);
+
+}
+
+void __fastcall TForm1::Edit1Change(TObject *Sender)
+{
+	FieldEND->Canvas->Draw(0,0,FieldBLUE->Picture->Graphic);
+	IHeight=StrToInt(Edit1->Text);
+	FieldEND->Height=IHeight;
+	IDifference=IHeight-PngPictureTOP->Height-PngPictureBOT->Height;
+	if(IDifference<0||IDifference>1000)
+		return;
+	draw();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::ScrollBar1Change(TObject *Sender)
+{
+   Edit1->Text=IntToStr(ScrollBar1->Position);
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::Button1Click(TObject *Sender)
+{
+	if(IDifference<0||IDifference>1000)
+		return;
+	PngPictureEND=new TPngImage();
+	PngPictureEND->Assign(FieldEND->Picture->Graphic) ;
+	PngPictureEND->SetSize(PngPictureEND->Width,IHeight);
+	PngPictureEND->Transparent = true;
+	PngPictureEND->TransparentColor= PngPictureEND->Canvas->Pixels[1][1];
+	UnicodeString name = Edit2->Text+".png";
+	PngPictureEND->CreateAlpha();
+	PngPictureEND->Pixels[0][0]=0x00FF00FF;
+	//PngPictureEND->TransparentColor= PngPictureEND->Canvas->Pixels[1][1];
+	PngPictureEND->SaveToFile("podnosnik_end/"+name);
+ //================================================================================================================
+	load(2);
+
+	FieldEND->Canvas->Draw(0,0,FieldBLUE->Picture->Graphic);
+	draw();
+
+	PngPictureEND->Assign(FieldEND->Picture->Graphic) ;
+	PngPictureEND->SetSize(PngPictureEND->Width,IHeight);
+	PngPictureEND->Transparent = true;
+	PngPictureEND->TransparentColor= PngPictureEND->Canvas->Pixels[1][1];
+
+	name = Edit2->Text+"2.png";
+	PngPictureEND->CreateAlpha();
+	PngPictureEND->SaveToFile("podnosnik_end/"+name);
+
+	load(3);
+
+	FieldEND->Canvas->Draw(0,0,FieldBLUE->Picture->Graphic);
+	draw();
+
+	PngPictureEND->Assign(FieldEND->Picture->Graphic) ;
+	PngPictureEND->SetSize(PngPictureEND->Width,IHeight);
+
+	PngPictureEND->Transparent = true;
+	PngPictureEND->TransparentColor= PngPictureEND->Canvas->Pixels[1][1];
+	name = Edit2->Text+"3.png";
+	PngPictureEND->CreateAlpha();
+	PngPictureEND->SaveToFile("podnosnik_end/"+name);
+
+	load(1);
+
+	FieldEND->Canvas->Draw(0,0,FieldBLUE->Picture->Graphic);
+	draw();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::CheckBox1Click(TObject *Sender)
+{
+	if(CheckBox1->Checked)
+	{
+		 Form1->Color=Form1->Canvas->Pixels[1][1];
+		 Form1->TransparentColor=true;
+	}
+	else
+	 {
+		  Form1->Color=clLtGray;
+		  Form1->TransparentColor=false;
+	 }
+
+}
+//---------------------------------------------------------------------------
+
+ void __fastcall TForm1::Button2Click(TObject *Sender)
+{
+	load(1);
+    FieldEND->Canvas->Draw(0,0,FieldBLUE->Picture->Graphic);
+	draw();
+    Form2->Show();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::ScrollBar2Change(TObject *Sender)
+{
+	FieldEND->Canvas->Draw(0,0,FieldBLUE->Picture->Graphic);
+	draw();
+}
+//---------------------------------------------------------------------------
+
+
+// WSZYSTKIE KOMENTARZE
+//PngPictureMID->RemoveTransparency();
+//cout<< PngPictureTOP->AlphaScanline[4]<<endl;
+//cout<<PngPictureTOP->TransparentColor=clYellow;
+//FieldEND->Canvas->Draw(0,0,FieldWHITE->Picture->Graphic);
+//FieldEND->Picture->LoadFromFile();// Assign(NULL);
+/*delete ImageEnd;
+ImageEnd = new TImage(Form1);
+ImageEnd->Width  = FieldEND->Width;
+ImageEnd->Height = FieldEND->Height;
+ImageEnd->Left = 50;
+ImageEnd->Top = 0;
+ImageEnd->Parent = Form1;
+InsertComponent(ImageEnd);  */
+//FieldEND->Transparent=true;
+//ImageEnd->Picture->Graphic-> Canvas->c=ImageEnd->Canvas->Pixels[1][1];
+//ImageEnd->TransparentColor= ImageEnd->Canvas->Pixels[1][1];
+//FieldMID->Picture->Graphic->Transparent = true;
+//ImageEnd->Picture->Graphic->Transparent = true;
+/* for(int i=0;i<4;i++)
+{
+	FieldEND->Canvas->Draw(0,57+(i*iDifference/4),FieldSPECIAL->Picture->Graphic);
+} */
+/*PngPictureEND->Canvas->Draw(2,0,PngPictureTOP);
+for (int i=0; i<IDifference ;i++)
+{
+	if(i%100==0&&i!=0)
+		PngPictureEND->Draw(0,PngPictureTOP->Height+i,PngPictureSPECIAL);
+	else
+		PngPictureEND->Draw(0,PngPictureTOP->Height+i,PngPictureMID);
+}
+PngPictureEND->Canvas->Draw(0,PngPictureTOP->Height+IDifference,PngPictureBOT);  */
+/*Tpoint p1(0,0);
+Tpoint p2(PngPictureTOP->Width,PngPictureTOP->Height)
+PngPictureEND->SaveToFile(Edit2->Text);
+PngPictureEND->Draw(PngPictureEND->Canvas,) ;
+PngPictureEND->dr */
+
+

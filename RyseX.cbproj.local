@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899-12-30 00:00:00.000.045,C:\Users\USER\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\Users\USER\Documents\Embarcadero\Studio\Projects\podnosnik\Unit1.dfm</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.315,C:\Users\USER\Documents\Embarcadero\Studio\Projects\Project1.cbproj=C:\Users\USER\Documents\Embarcadero\Studio\Projects\podnosnik\Project1.cbproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.045,C:\Users\USER\Documents\Embarcadero\Studio\Projects\Unit1.h=C:\Users\USER\Documents\Embarcadero\Studio\Projects\podnosnik\Unit1.h</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.356,C:\Users\USER\Documents\Embarcadero\Studio\Projects\podnosnik\Project1.cbproj=C:\Users\USER\Documents\Embarcadero\Studio\Projects\podnosnik\RyseX.cbproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.507,=C:\Users\USER\Documents\Embarcadero\Studio\Projects\podnosnik\Unit2.cpp</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.045,C:\Users\USER\Documents\Embarcadero\Studio\Projects\Unit1.cpp=C:\Users\USER\Documents\Embarcadero\Studio\Projects\podnosnik\Unit1.cpp</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.476,=C:\Users\USER\Documents\Embarcadero\Studio\Projects\Unit1.cpp</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.764,=C:\Users\USER\Documents\Embarcadero\Studio\Projects\podnosnik\Unit3.cpp</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.457,=C:\Users\USER\Documents\Embarcadero\Studio\Projects\Project1PCH1.h</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.394,C:\Users\USER\Documents\Embarcadero\Studio\Projects\Project1PCH1.h=C:\Users\USER\Documents\Embarcadero\Studio\Projects\podnosnik\Project1PCH1.h</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.029,=C:\Users\USER\Documents\Embarcadero\Studio\Projects\podnosnik\Unit4.cpp</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.325,C:\Users\USER\Documents\Embarcadero\Studio\Projects\podnosnik\Project1PCH1.h=C:\Users\USER\Documents\Embarcadero\Studio\Projects\podnosnik\RyseXPCH1.h</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.860,C:\Users\USER\Documents\Embarcadero\Studio\Projects\podnosnik\Unit5.cpp=</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.905,=C:\Users\USER\Documents\Embarcadero\Studio\Projects\podnosnik\Unit5.cpp</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.156,=C:\Users\USER\Documents\Embarcadero\Studio\Projects\podnosnik\Unit5.cpp</Transaction>
+  </Transactions>
+</BorlandProject>

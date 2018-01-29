@@ -1,0 +1,304 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit4.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm4 *Form4;
+//---------------------------------------------------------------------------
+__fastcall TForm4::TForm4(TComponent* Owner)
+	: TForm(Owner)
+{
+	//Canvas->Pen->Mode = psDash  ;
+	//Image1->Canvas->Pen->Width=2;
+	CColor=clWhite;
+	Image1->Canvas->Draw(0,0,Image2->Picture->Graphic);
+	PngBackGround=new TPngImage;
+	PngBackGround->LoadFromFile("white4.png");
+	Image3->Picture->Assign(PngBackGround);
+	Form4->Color=clLtGray;
+	Form4->DoubleBuffered = true;
+	BPointerUp=false;
+	BPointerDown=false;
+	BPointerLeft=false;
+	BPointerRight=false;
+}
+
+ //---------------------------------------------------------------------------
+void __fastcall TForm4::draw()
+{
+    BPointerUp=false;
+	BPointerDown=false;
+	BPointerLeft=false;
+	BPointerRight=false;
+	//Image1->Canvas->Pen->Color=CColor;
+	//CColor=StrToInt(Edit1->Text);
+	//int i=(int)CColor;
+	//Label2->Caption=IntToStr(i);
+
+	int red   = (CColor & 0xff0000) >> 16;
+	int green = (CColor & 0x00ff00) >> 8;
+	int blue  = (CColor & 0x0000ff);
+	Image1->Canvas->Draw(0,0,Image2->Picture->Graphic);
+	for (std::list<TPoint>::iterator it=list_point.begin(); it != list_point.end(); ++it)
+	{
+		Image1->Canvas->Pen->Color=RGB(red-20,blue-20,green-20);
+		Image1->Canvas->Pen->Width=5;
+		Image1->Canvas->MoveTo(it->X,it->Y);
+		++it;
+		Image1->Canvas->LineTo(it->X,it->Y);
+		--it;
+		Image1->Canvas->Pen->Color=RGB(red-10,blue-10,green-10);//CColor;//+clBlack;
+		Image1->Canvas->Pen->Width=3;
+		Image1->Canvas->MoveTo(it->X,it->Y);
+		++it;
+		Image1->Canvas->LineTo(it->X,it->Y);
+		--it;
+		Image1->Canvas->Pen->Color=CColor;//CColor+clBlack+clBlack;  */
+		Image1->Canvas->Pen->Width=9;
+		Image1->Canvas->MoveTo(it->X,it->Y);
+		++it;
+		Image1->Canvas->LineTo(it->X,it->Y);
+		--it;
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm4::drawPointer( int ic)//case ic = 1 gora, ic=2 dol, ic=3 lewo, ic=4 prawo
+{
+	int iX=list_point.back().X;
+	int iY=list_point.back().Y;
+	Image1->Canvas->Brush->Color=CColor;
+	switch (ic) {
+	case 1:
+		 Image1->Canvas->Polygon(OPENARRAY (TPoint, (
+		 Point(iX, iY),
+		 Point(iX, iY-15),
+		 Point(iX, iY-14),
+		 Point(iX+3, iY-9),
+		 Point(iX, iY-9))));
+		 BPointerUp=true;
+		break;
+	case 2:
+		 Image1->Canvas->Polygon(OPENARRAY (TPoint, (
+		 Point(iX, iY),
+		 Point(iX, iY+15),
+		 Point(iX, iY+14),
+		 Point(iX-3, iY+9),
+		 Point(iX, iY+9))));
+		 BPointerDown=true;
+		break;
+	case 3:
+		 Image1->Canvas->Polygon(OPENARRAY (TPoint, (
+		 Point(iX, iY),
+		 Point(iX-15, iY),
+		 Point(iX-14, iY),
+		 Point(iX-9, iY-3),
+		 Point(iX-9, iY))));
+		 BPointerLeft=true;
+		break;
+	case 4:
+		 Image1->Canvas->Polygon(OPENARRAY (TPoint, (
+		 Point(iX, iY),
+		 Point(iX+15, iY),
+		 Point(iX+14, iY),
+		 Point(iX+9, iY-3),
+		 Point(iX+9, iY))));
+		 BPointerRight=true;
+		break;
+	default:
+		;
+	}
+
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm4::Image1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift,
+		  int X, int Y)
+{
+	TPoint tmp(X,Y);
+	list_point.push_back(tmp);
+	if(!list_point.empty())
+		draw();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm4::Button1Click(TObject *Sender)
+{
+	Image1->Canvas->Draw(0,0,Image2->Picture->Graphic);
+	while(!list_point.empty())
+		list_point.pop_back();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm4::Button4Click(TObject *Sender)
+{
+	drawPointer(1);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm4::Button5Click(TObject *Sender)
+{
+	drawPointer(2);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm4::Button2Click(TObject *Sender)
+{
+   drawPointer(3);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm4::Button3Click(TObject *Sender)
+{
+	drawPointer(4);
+}
+
+//---------------------------------------------------------------------------
+
+void __fastcall TForm4::Image1MouseMove(TObject *Sender, TShiftState Shift, int X,
+          int Y)
+{
+ if (CheckBox1->Checked)
+	if(!list_point.empty())
+		{
+			Image1->Canvas->Pen->Color=Image1->Canvas->Pixels[1][1];
+			Image1->Canvas->MoveTo(list_point.back().X,list_point.back().Y);
+			Image1->Canvas->LineTo(IOldX,IOldY);
+			Image1->Canvas->Pen->Color=CColor;
+			Image1->Canvas->MoveTo(list_point.back().X,list_point.back().Y);
+			Image1->Canvas->LineTo(X,Y);
+
+			IOldX=X;
+			IOldY=Y;
+			double dAlfa=0;
+			if(Y-list_point.back().Y!=0)
+				dAlfa=atan((double)(X-list_point.back().X)/(Y-list_point.back().Y));
+			int iAlfa =(int)(dAlfa*180)/M_PI;
+			Label2->Caption=IntToStr(iAlfa);
+			//TPoint tmp(X,Y);
+			//list_point.push_back(tmp);
+			//draw();
+			//list_point.pop_back();
+		}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm4::CheckBox1Click(TObject *Sender)
+{
+	if(!CheckBox1->Checked)
+		if(!list_point.empty());
+			draw();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm4::CheckBox2Click(TObject *Sender)
+{
+	if(CheckBox2->Checked)
+	{
+		 Form4->Color=clBlack;//Form4->Canvas->Pixels[0][0];
+		 Form4->TransparentColor=true;
+	}
+	else
+	{
+		Form4->Color=clLtGray;
+		Form4->TransparentColor=false;
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm4::Button6Click(TObject *Sender)
+{
+	if(BPointerUp)
+	{
+		TPoint tmp(list_point.back().X+3,list_point.back().Y-15);
+		list_point.push_back(tmp);
+	}
+	if(BPointerDown)
+	{
+		TPoint tmp(list_point.back().X-3,list_point.back().Y+15);
+		list_point.push_back(tmp);
+	}
+	if(BPointerLeft)
+	{
+	  TPoint tmp(list_point.back().X-15,list_point.back().Y-3);
+		list_point.push_back(tmp);
+	}
+	if(BPointerRight)
+	{
+		TPoint tmp(list_point.back().X+15,list_point.back().Y-3);
+		list_point.push_back(tmp);
+	}
+
+	int imaxX=0;
+	int imaxY=0;
+	int iminX=100000000;
+	int iminY=100000000;
+
+	for (std::list<TPoint>::iterator it=list_point.begin(); it != list_point.end(); ++it)
+	{
+		if(it->X<iminX)
+			iminX= it->X;
+		if(it->Y<iminY)
+			iminY= it->Y;
+		if(it->X>imaxX)
+			imaxX= it->X;
+		if(it->Y>imaxY)
+			imaxY= it->Y;
+	}
+
+	list_point.pop_back();//usuwa strza³ke
+	ImageEnd->Canvas->Draw(-iminX,-iminY,Image1->Picture->Graphic);
+	PngEnd=new TPngImage();
+	PngEnd->Assign(ImageEnd->Picture->Graphic);
+
+	PngEnd->SetSize(1+imaxX-iminX,1+imaxY-iminY);
+	PngEnd->Transparent = true;
+	PngEnd->TransparentColor= Image1->Canvas->Pixels[1][1];
+	UnicodeString name = Edit1->Text+".png";
+	if(!CheckBox3->Checked)
+		PngEnd->CreateAlpha();//=<<<<<<<<<<<<<<<<<<<<========== USUN JAK POTRZEBA PRZEZROCZYSTOSCI
+	PngEnd->SaveToFile("strza³ka_end/"+name);
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm4::ImageColorClick(TObject *Sender)
+{
+	ColorDialog->Color = clWhite;
+  if(ColorDialog->Execute(this->Handle))
+   {
+	 CColor = ColorDialog->Color;
+	 draw();
+   }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm4::Button7Click(TObject *Sender)
+{
+   list_point.pop_back();
+   draw();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm4::FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
+{
+	if (Key == 0x70){
+		if(CheckBox2->Checked == false)
+			CheckBox2->Checked = true;
+		else
+			CheckBox2->Checked = false;
+	}
+		if (Key == 0x71){
+		if(CheckBox1->Checked == false)
+			CheckBox1->Checked = true;
+		else
+			CheckBox1->Checked = false;
+	}
+}
+//---------------------------------------------------------------------------
+

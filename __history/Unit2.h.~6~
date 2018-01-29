@@ -1,0 +1,65 @@
+//---------------------------------------------------------------------------
+
+#ifndef Unit2H
+#define Unit2H
+//---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+#include <Vcl.Controls.hpp>
+#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Forms.hpp>
+#include <Vcl.ExtCtrls.hpp>
+#include <pngimage.hpp>
+//---------------------------------------------------------------------------
+class TForm2 : public TForm
+{
+__published:	// IDE-managed Components
+	TImage *FieldEND;
+	TEdit *Edit1;
+	TEdit *Edit2;
+	TEdit *Edit3;
+	TButton *Button1;
+	TButton *Button2;
+	TLabel *Label1;
+	TLabel *Label2;
+	TLabel *Label3;
+	TImage *FieldBOT;
+	TImage *FieldMID;
+	TImage *FieldLEFT;
+	TImage *FieldRIGHT;
+	TImage *FieldSPECIAL;
+	TImage *FieldTOP;
+	TImage *FieldBLUE;
+	TCheckBox *CheckBox1;
+	TScrollBar *ScrollBar1;
+	TScrollBar *ScrollBar2;
+	TScrollBar *ScrollBar3;
+	TLabel *Label4;
+	TLabel *Label5;
+	TLabel *Label6;
+	TLabel *Label7;
+	TScrollBar *ScrollBar4;
+	void __fastcall Edit1Change(TObject *Sender);
+	void __fastcall ScrollBar2Change(TObject *Sender);
+	void __fastcall ScrollBar1Change(TObject *Sender);
+	void __fastcall ScrollBar3Change(TObject *Sender);
+	void __fastcall ScrollBar4Change(TObject *Sender);
+private:	// User declarations
+	int IWidth;
+    int IDifference;
+	TPngImage *PngPictureEND;
+	TPngImage *PngPictureTOP;
+	TPngImage *PngPictureMID;
+	TPngImage *PngPictureBOT;
+	TPngImage *PngPictureLEFT;
+	TPngImage *PngPictureRIGHT;
+	TPngImage *PngPictureSPECIAL;
+	UnicodeString SSource;
+	__fastcall void draw();
+	__fastcall void load(int iNr);
+public:		// User declarations
+	__fastcall TForm2(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TForm2 *Form2;
+//---------------------------------------------------------------------------
+#endif
